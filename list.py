@@ -1,17 +1,31 @@
-tasks = []  
+# enhanced_todo_list.py
+# Console-based Realtime To-Do List with Priority and Due Date
+
+tasks = []  # List to store tasks as dictionaries
 
 def display_tasks():
     if not tasks:
         print("No tasks in your list.")
     else:
-        print("Your Tasks:")
+        print("\nYour Tasks:")
         for i, task in enumerate(tasks, start=1):
-            print(f"{i}. {task}")
+            status = "✅" if task['done'] else "❌"
+            print(f"{i}. [{status}] {task['name']} | Priority: {task['priority']} | Due: {task['due_date']}")
 
 def add_task():
-    task = input("Enter the task to add: ")
+    name = input("Enter task name: ")
+    priority = input("Enter priority (High/Medium/Low): ").capitalize()
+    if priority not in ['High', 'Medium', 'Low']:
+        priority = "Medium"
+    due_date = input("Enter due date (e.g., 2026-01-15): ")
+    task = {
+        'name': name,
+        'priority': priority,
+        'due_date': due_date,
+        'done': False
+    }
     tasks.append(task)
-    print(f"Task added: {task}")
+    print(f"Task added: {name}")
 
 def delete_task():
     if not tasks:
@@ -22,7 +36,7 @@ def delete_task():
         task_num = int(input("Enter the task number to delete: "))
         if 1 <= task_num <= len(tasks):
             removed_task = tasks.pop(task_num - 1)
-            print(f"Task deleted: {removed_task}")
+            print(f"Task deleted: {removed_task['name']}")
         else:
             print("Invalid task number!")
     except ValueError:
@@ -36,15 +50,15 @@ def mark_done():
     try:
         task_num = int(input("Enter the task number to mark as done: "))
         if 1 <= task_num <= len(tasks):
-            tasks[task_num - 1] += " ✅"
-            print(f"Task marked as done: {tasks[task_num - 1]}")
+            tasks[task_num - 1]['done'] = True
+            print(f"Task marked as done: {tasks[task_num - 1]['name']}")
         else:
             print("Invalid task number!")
     except ValueError:
         print("Please enter a valid number!")
 
 def main():
-    print("=== Welcome to the Realtime To-Do List ===")
+    print("=== Welcome to the Enhanced To-Do List ===")
 
     while True:
         print("\nOptions:")
